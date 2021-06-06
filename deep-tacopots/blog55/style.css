@@ -1,0 +1,2473 @@
+.line-chart {
+    display: block;
+    position: relative;
+    width: 600px;
+    height: 200px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: darkgray;
+  }
+  .line-chart .line-0 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 0px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 180px;
+    width: 20.8981086661px;
+    background: red;
+    transform: rotate(73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-0:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-1 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 6.0606060606px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 200px;
+    width: 6.0606060606px;
+    background: black;
+  }
+  .line-chart .line-1:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-2 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 12.1212121212px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 200px;
+    width: 160.114743062px;
+    background: blue;
+    transform: rotate(-87.8307424103deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-2:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-3 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 18.1818181818px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 40px;
+    width: 100.1834863928px;
+    background: red;
+    transform: rotate(86.5317707411deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-3:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-4 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 24.2424242424px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 140px;
+    width: 20.8981086661px;
+    background: red;
+    transform: rotate(73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-4:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-5 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 30.303030303px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 160px;
+    width: 6.0606060606px;
+    background: black;
+  }
+  .line-chart .line-5:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-6 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 36.3636363636px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 160px;
+    width: 20.8981086661px;
+    background: red;
+    transform: rotate(73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-6:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-7 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 42.4242424242px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 180px;
+    width: 20.8981086661px;
+    background: red;
+    transform: rotate(73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-7:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-8 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 48.4848484848px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 200px;
+    width: 60.3053144078px;
+    background: blue;
+    transform: rotate(-84.2321111021deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-8:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-9 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 54.5454545455px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 140px;
+    width: 60.3053144078px;
+    background: blue;
+    transform: rotate(-84.2321111021deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-9:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-10 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 60.6060606061px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 80px;
+    width: 80.2292399679px;
+    background: red;
+    transform: rotate(85.6676860168deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-10:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-11 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 66.6666666667px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 160px;
+    width: 100.1834863928px;
+    background: blue;
+    transform: rotate(-86.5317707411deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-11:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-12 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 72.7272727273px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 60px;
+    width: 20.8981086661px;
+    background: red;
+    transform: rotate(73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-12:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-13 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 78.7878787879px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 80px;
+    width: 20.8981086661px;
+    background: blue;
+    transform: rotate(-73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-13:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-14 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 84.8484848485px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 60px;
+    width: 6.0606060606px;
+    background: black;
+  }
+  .line-chart .line-14:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-15 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 90.9090909091px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 60px;
+    width: 60.3053144078px;
+    background: red;
+    transform: rotate(84.2321111021deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-15:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-16 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 96.9696969697px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 120px;
+    width: 100.1834863928px;
+    background: blue;
+    transform: rotate(-86.5317707411deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-16:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-17 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 103.0303030303px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 20px;
+    width: 160.114743062px;
+    background: red;
+    transform: rotate(87.8307424103deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-17:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-18 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 109.0909090909px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 180px;
+    width: 160.114743062px;
+    background: blue;
+    transform: rotate(-87.8307424103deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-18:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-19 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 115.1515151515px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 20px;
+    width: 100.1834863928px;
+    background: red;
+    transform: rotate(86.5317707411deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-19:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-20 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 121.2121212121px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 120px;
+    width: 100.1834863928px;
+    background: blue;
+    transform: rotate(-86.5317707411deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-20:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-21 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 127.2727272727px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 20px;
+    width: 40.4565315595px;
+    background: red;
+    transform: rotate(81.3843518158deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-21:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-22 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 133.3333333333px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 60px;
+    width: 100.1834863928px;
+    background: red;
+    transform: rotate(86.5317707411deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-22:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-23 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 139.3939393939px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 160px;
+    width: 120.1529481362px;
+    background: blue;
+    transform: rotate(-87.1087304038deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-23:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-24 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 145.4545454545px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 40px;
+    width: 20.8981086661px;
+    background: red;
+    transform: rotate(73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-24:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-25 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 151.5151515152px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 60px;
+    width: 20.8981086661px;
+    background: blue;
+    transform: rotate(-73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-25:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-26 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 157.5757575758px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 40px;
+    width: 20.8981086661px;
+    background: red;
+    transform: rotate(73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-26:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-27 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 163.6363636364px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 60px;
+    width: 120.1529481362px;
+    background: red;
+    transform: rotate(87.1087304038deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-27:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-28 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 169.696969697px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 180px;
+    width: 60.3053144078px;
+    background: blue;
+    transform: rotate(-84.2321111021deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-28:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-29 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 175.7575757576px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 120px;
+    width: 20.8981086661px;
+    background: red;
+    transform: rotate(73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-29:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-30 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 181.8181818182px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 140px;
+    width: 20.8981086661px;
+    background: blue;
+    transform: rotate(-73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-30:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-31 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 187.8787878788px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 120px;
+    width: 80.2292399679px;
+    background: blue;
+    transform: rotate(-85.6676860168deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-31:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-32 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 193.9393939394px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 40px;
+    width: 40.4565315595px;
+    background: red;
+    transform: rotate(81.3843518158deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-32:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-33 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 200px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 80px;
+    width: 60.3053144078px;
+    background: blue;
+    transform: rotate(-84.2321111021deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-33:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-34 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 206.0606060606px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 20px;
+    width: 20.8981086661px;
+    background: red;
+    transform: rotate(73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-34:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-35 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 212.1212121212px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 40px;
+    width: 140.1311205472px;
+    background: red;
+    transform: rotate(87.5212108914deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-35:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-36 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 218.1818181818px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 180px;
+    width: 80.2292399679px;
+    background: blue;
+    transform: rotate(-85.6676860168deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-36:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-37 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 224.2424242424px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 100px;
+    width: 20.8981086661px;
+    background: blue;
+    transform: rotate(-73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-37:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-38 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 230.303030303px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 80px;
+    width: 60.3053144078px;
+    background: blue;
+    transform: rotate(-84.2321111021deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-38:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-39 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 236.3636363636px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 20px;
+    width: 40.4565315595px;
+    background: red;
+    transform: rotate(81.3843518158deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-39:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-40 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 242.4242424242px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 60px;
+    width: 80.2292399679px;
+    background: red;
+    transform: rotate(85.6676860168deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-40:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-41 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 248.4848484848px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 140px;
+    width: 40.4565315595px;
+    background: blue;
+    transform: rotate(-81.3843518158deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-41:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-42 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 254.5454545455px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 100px;
+    width: 40.4565315595px;
+    background: red;
+    transform: rotate(81.3843518158deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-42:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-43 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 260.6060606061px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 140px;
+    width: 40.4565315595px;
+    background: red;
+    transform: rotate(81.3843518158deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-43:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-44 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 266.6666666667px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 180px;
+    width: 140.1311205472px;
+    background: blue;
+    transform: rotate(-87.5212108914deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-44:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-45 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 272.7272727273px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 40px;
+    width: 60.3053144078px;
+    background: red;
+    transform: rotate(84.2321111021deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-45:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-46 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 278.7878787879px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 100px;
+    width: 60.3053144078px;
+    background: blue;
+    transform: rotate(-84.2321111021deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-46:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-47 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 284.8484848485px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 40px;
+    width: 60.3053144078px;
+    background: red;
+    transform: rotate(84.2321111021deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-47:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-48 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 290.9090909091px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 100px;
+    width: 80.2292399679px;
+    background: blue;
+    transform: rotate(-85.6676860168deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-48:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-49 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 296.9696969697px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 20px;
+    width: 80.2292399679px;
+    background: red;
+    transform: rotate(85.6676860168deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-49:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-50 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 303.0303030303px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 100px;
+    width: 60.3053144078px;
+    background: red;
+    transform: rotate(84.2321111021deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-50:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-51 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 309.0909090909px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 160px;
+    width: 40.4565315595px;
+    background: red;
+    transform: rotate(81.3843518158deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-51:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-52 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 315.1515151515px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 200px;
+    width: 40.4565315595px;
+    background: blue;
+    transform: rotate(-81.3843518158deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-52:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-53 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 321.2121212121px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 160px;
+    width: 20.8981086661px;
+    background: blue;
+    transform: rotate(-73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-53:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-54 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 327.2727272727px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 140px;
+    width: 60.3053144078px;
+    background: red;
+    transform: rotate(84.2321111021deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-54:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-55 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 333.3333333333px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 200px;
+    width: 80.2292399679px;
+    background: blue;
+    transform: rotate(-85.6676860168deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-55:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-56 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 339.3939393939px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 120px;
+    width: 80.2292399679px;
+    background: blue;
+    transform: rotate(-85.6676860168deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-56:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-57 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 345.4545454545px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 40px;
+    width: 6.0606060606px;
+    background: black;
+  }
+  .line-chart .line-57:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-58 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 351.5151515152px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 40px;
+    width: 120.1529481362px;
+    background: red;
+    transform: rotate(87.1087304038deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-58:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-59 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 357.5757575758px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 160px;
+    width: 6.0606060606px;
+    background: black;
+  }
+  .line-chart .line-59:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-60 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 363.6363636364px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 160px;
+    width: 140.1311205472px;
+    background: blue;
+    transform: rotate(-87.5212108914deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-60:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-61 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 369.696969697px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 20px;
+    width: 20.8981086661px;
+    background: red;
+    transform: rotate(73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-61:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-62 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 375.7575757576px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 40px;
+    width: 20.8981086661px;
+    background: blue;
+    transform: rotate(-73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-62:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-63 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 381.8181818182px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 20px;
+    width: 180.1020015042px;
+    background: red;
+    transform: rotate(88.0715776867deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-63:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-64 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 387.8787878788px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 200px;
+    width: 160.114743062px;
+    background: blue;
+    transform: rotate(-87.8307424103deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-64:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-65 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 393.9393939394px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 40px;
+    width: 120.1529481362px;
+    background: red;
+    transform: rotate(87.1087304038deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-65:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-66 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 400px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 160px;
+    width: 80.2292399679px;
+    background: blue;
+    transform: rotate(-85.6676860168deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-66:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-67 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 406.0606060606px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 80px;
+    width: 80.2292399679px;
+    background: red;
+    transform: rotate(85.6676860168deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-67:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-68 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 412.1212121212px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 160px;
+    width: 120.1529481362px;
+    background: blue;
+    transform: rotate(-87.1087304038deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-68:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-69 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 418.1818181818px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 40px;
+    width: 160.114743062px;
+    background: red;
+    transform: rotate(87.8307424103deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-69:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-70 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 424.2424242424px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 200px;
+    width: 120.1529481362px;
+    background: blue;
+    transform: rotate(-87.1087304038deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-70:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-71 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 430.303030303px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 80px;
+    width: 100.1834863928px;
+    background: red;
+    transform: rotate(86.5317707411deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-71:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-72 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 436.3636363636px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 180px;
+    width: 140.1311205472px;
+    background: blue;
+    transform: rotate(-87.5212108914deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-72:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-73 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 442.4242424242px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 40px;
+    width: 160.114743062px;
+    background: red;
+    transform: rotate(87.8307424103deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-73:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-74 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 448.4848484848px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 200px;
+    width: 6.0606060606px;
+    background: black;
+  }
+  .line-chart .line-74:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-75 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 454.5454545455px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 200px;
+    width: 100.1834863928px;
+    background: blue;
+    transform: rotate(-86.5317707411deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-75:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-76 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 460.6060606061px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 100px;
+    width: 100.1834863928px;
+    background: red;
+    transform: rotate(86.5317707411deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-76:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-77 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 466.6666666667px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 200px;
+    width: 140.1311205472px;
+    background: blue;
+    transform: rotate(-87.5212108914deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-77:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-78 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 472.7272727273px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 60px;
+    width: 20.8981086661px;
+    background: blue;
+    transform: rotate(-73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-78:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-79 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 478.7878787879px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 40px;
+    width: 20.8981086661px;
+    background: red;
+    transform: rotate(73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-79:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-80 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 484.8484848485px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 60px;
+    width: 20.8981086661px;
+    background: red;
+    transform: rotate(73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-80:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-81 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 490.9090909091px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 80px;
+    width: 60.3053144078px;
+    background: red;
+    transform: rotate(84.2321111021deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-81:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-82 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 496.9696969697px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 140px;
+    width: 60.3053144078px;
+    background: blue;
+    transform: rotate(-84.2321111021deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-82:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-83 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 503.0303030303px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 80px;
+    width: 100.1834863928px;
+    background: red;
+    transform: rotate(86.5317707411deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-83:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-84 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 509.0909090909px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 180px;
+    width: 20.8981086661px;
+    background: blue;
+    transform: rotate(-73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-84:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-85 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 515.1515151515px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 160px;
+    width: 140.1311205472px;
+    background: blue;
+    transform: rotate(-87.5212108914deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-85:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-86 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 521.2121212121px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 20px;
+    width: 140.1311205472px;
+    background: red;
+    transform: rotate(87.5212108914deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-86:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-87 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 527.2727272727px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 160px;
+    width: 20.8981086661px;
+    background: red;
+    transform: rotate(73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-87:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-88 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 533.3333333333px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 180px;
+    width: 20.8981086661px;
+    background: blue;
+    transform: rotate(-73.1416012323deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-88:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-89 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 539.3939393939px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 160px;
+    width: 80.2292399679px;
+    background: blue;
+    transform: rotate(-85.6676860168deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-89:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-90 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 545.4545454545px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 80px;
+    width: 40.4565315595px;
+    background: red;
+    transform: rotate(81.3843518158deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-90:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-91 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 551.5151515152px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 120px;
+    width: 60.3053144078px;
+    background: blue;
+    transform: rotate(-84.2321111021deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-91:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-92 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 557.5757575758px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 60px;
+    width: 40.4565315595px;
+    background: blue;
+    transform: rotate(-81.3843518158deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-92:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-93 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 563.6363636364px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 20px;
+    width: 60.3053144078px;
+    background: red;
+    transform: rotate(84.2321111021deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-93:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-94 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 569.696969697px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 80px;
+    width: 80.2292399679px;
+    background: red;
+    transform: rotate(85.6676860168deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-94:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-95 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 575.7575757576px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 160px;
+    width: 60.3053144078px;
+    background: blue;
+    transform: rotate(-84.2321111021deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-95:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-96 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 581.8181818182px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 100px;
+    width: 40.4565315595px;
+    background: red;
+    transform: rotate(81.3843518158deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-96:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-97 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 587.8787878788px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 140px;
+    width: 40.4565315595px;
+    background: red;
+    transform: rotate(81.3843518158deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-97:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }
+  .line-chart .line-98 {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    left: 593.9393939394px;
+    width: 6.0606060606px;
+    height: 2px;
+    top: 180px;
+    width: 120.1529481362px;
+    background: blue;
+    transform: rotate(-87.1087304038deg);
+    transform-origin: 0 50%;
+  }
+  .line-chart .line-98:before {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: yellow;
+  }

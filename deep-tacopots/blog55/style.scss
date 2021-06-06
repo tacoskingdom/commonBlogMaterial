@@ -1,0 +1,71 @@
+@use 'sass:math';
+@use 'data';
+
+@mixin generic_line(
+    $line_index,
+    $chart_width,
+    $chart_height,
+    $rect_width,
+    $line_width,
+    $data
+) {
+    .line-#{$line_index - 1} {
+        position: absolute;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        left: $rect_width * ($line_index - 1);
+        width: $rect_width;
+        height: $line_width;
+
+        top: $chart_height * (1 - nth(nth($data, $line_index), 2) / 10);
+        $diff: nth(nth($data, $line_index + 1), 2) - nth(nth($data, $line_index), 2);
+        $rect_height: $chart_height * abs($diff) / 10;
+        width: 1px*math.pow(math.pow($rect_width/1px,2)+math.pow($rect_height/1px,2), 0.5);
+
+        $tilte_angle: math.atan(-1*$chart_height*$diff/10/$rect_width);
+
+        @if $diff > 0 {
+            background: blue;
+            transform: rotate($tilte_angle);
+            transform-origin: 0 50%;
+        } @else if $diff < 0 {
+            background: red;
+            transform: rotate($tilte_angle);
+            transform-origin: 0 50%;
+        } @else {
+            background: black;
+        }
+
+        &:before {
+            display: block;
+            position: absolute;
+            border-radius: 50%;
+            content: "";
+            top: 0;
+            left: 0;
+            width: $line_width;
+            height: $line_width;
+            background: yellow;
+        }
+    }
+}
+
+.line-chart {
+    $chart_width: 600px;
+    $chart_height: 200px;
+    $section_num: 99;
+
+    display: block;
+    position: relative;
+    width: $chart_width;
+    height: $chart_height;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: darkgray;
+
+    @for $i from 1 through $section_num {
+        @include generic_line($i, $chart_width, $chart_height, $chart_width/$section_num, 2px, data.$sim_xydata);
+    }
+}
