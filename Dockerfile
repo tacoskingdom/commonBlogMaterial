@@ -6,4 +6,7 @@ RUN apk update && apk upgrade && \
 #👇Expectを追加
 RUN apk add --no-cache expect
 
+#👇GitHub CLIを追加
+RUN apk add --no-cache github-cli
+
 CMD ["bash"]
