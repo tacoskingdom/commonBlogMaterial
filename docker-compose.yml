@@ -1,1 +1,15 @@
-#Editing...
+version: '3'
+
+volumes:
+  ssh_key:
+
+services:
+  app:
+    image: my-app-dev:alpine3.15
+    build: .
+    container_name: my-app-dev
+    volumes:
+      - ./:/usr/src/app
+      - ssh_key:/usr/src/app/.ssh
+    working_dir: "/usr/src/app"
+    tty: true
