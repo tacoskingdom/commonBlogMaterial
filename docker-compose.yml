@@ -5,6 +5,7 @@ services:
     image: my-app-dev:alpine3.15
     build: .
     container_name: my-app-dev
+    user: "gituser:gituser"
     volumes:
       - ./:/usr/src/app
       #exclude files in volume
