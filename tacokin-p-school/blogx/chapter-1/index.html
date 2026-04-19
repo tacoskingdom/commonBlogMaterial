@@ -4,12 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kaplayの学習</title>
-    <script src="https://unpkg.com/kaplay@3001.0.12/dist/kaplay.js"></script>
 </head>
 <body>
-    <h1>Hello, World!</h1>
-    <script>
-        kaplay();
+    <script type="module">
+        import kaplay from "https://unpkg.com/kaplay@3001.0.19/dist/kaplay.mjs";
+        kaplay({
+            width: 320,      // 画面の横幅
+            height: 480,     // 画面の高さ
+            background: [0, 0, 0], // 背景を黒色に設定
+        });
+
+        const player = add([
+            rect(32, 32),            // 32x32ピクセルの四角形
+            pos(width() / 2, 20),    // 画面の真ん中、上のほうに配置
+            color(0, 0, 255),        // 青色にする
+            area(),                  // 当たり判定をつける
+        ]);
+
+        // 「左」キーが押されている間、左に動かす
+        onKeyDown("left", () => {
+            player.move(-200, 0);
+        });
+
+        // 「右」キーが押されている間、右に動かす
+        onKeyDown("right", () => {
+            player.move(200, 0);
+        });
     </script>
 </body>
 </html>
