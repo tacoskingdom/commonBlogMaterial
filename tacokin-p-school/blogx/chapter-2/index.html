@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaplayの学習</title>
+</head>
+<body>
+    <script type="module">
+        import kaplay from "https://unpkg.com/kaplay@3001.0.19/dist/kaplay.mjs";
+        kaplay({
+            width: 320,      // 画面の横幅
+            height: 480,     // 画面の高さ
+            background: [0, 0, 0], // 背景を黒色に設定
+        });
+
+        // ブロックの形（デザイン）を定義します
+        const SHAPES = {
+            "I": [ [1, 1, 1, 1] ],
+            "O": [ [1, 1], [1, 1] ],
+            "T": [ [0, 1, 0], [1, 1, 1] ],
+            "S": [ [0, 1, 1], [1, 1, 0] ],
+            "Z": [ [1, 1, 0], [0, 1, 1] ],
+            "J": [ [1, 0, 0], [1, 1, 1] ],
+            "L": [ [0, 0, 1], [1, 1, 1] ],
+        };
+
+        // ブロックごとの色も決めておきましょう
+        const COLORS = {
+            "I": [0, 255, 255], // 水色
+            "O": [255, 255, 0], // 黄色
+            "T": [255, 0, 255], // 紫色
+            "S": [122, 13, 45],
+            "Z": [101, 76, 22],
+            "J": [16, 117, 66],
+            "L": [77, 199, 201],
+        };
+
+        // 1つのブロックを描画する関数
+        function drawBlock(type, startX, startY, cellSize) {
+            const shape = SHAPES[type];
+            const colorRGB = COLORS[type] || [0, 255, 255]; // デフォルトは水色
+
+            // 1. ブロック全体をまとめる「親」となるオブジェクトを作成
+            const blockParent = add([
+                pos(startX, startY),
+                "currentBlock", // 後で操作するために目印（タグ）をつけておく
+            ]);
+
+            // 2. 2次元配列をループで回して、1が入っている場所に四角形（セル）を追加する
+            shape.forEach((row, rowIndex) => {
+                row.forEach((cell, colIndex) => {
+                    if (cell === 1) {
+                        // 親オブジェクト(blockParent)に子要素として追加
+                        blockParent.add([
+                            rect(cellSize, cellSize),
+                            pos(colIndex * cellSize, rowIndex * cellSize),
+                            color(colorRGB),
+                            outline(2), // 枠線をつけるとテトリスらしくなります
+                        ]);
+                    }
+                });
+            });
+
+            return blockParent;
+        }
+
+
+        function spawnBlock() {
+            // 形の名前（I, O, Tなど）をランダムに1つ選びます
+            const shapeType = choose(["I", "O", "T", "S", "Z", "J", "L"]);
+            // const shape = SHAPES[shapeType];
+            // const colorRGB = COLORS[shapeType];
+            // 選ばれたブロックを画面のてっぺんに追加します
+            // const block = add([
+            //     rect(32, 32), // 今回はとりあえず一つのパーツとして表示
+            //     pos(width() / 2, 0),
+            //     color(colorRGB),
+            //     "currentBlock", // 「操作中のブロック」という目印をつけます
+            // ]);
+            return drawBlock(shapeType, width() / 2, 0, 32);
+        }
+
+        let player = spawnBlock();
+
+        // 「左」キーが押されている間、左に動かす
+        onKeyDown("left", () => {
+            player.move(-200, 0);
+        });
+
+        // 「右」キーが押されている間、右に動かす
+        onKeyDown("right", () => {
+            player.move(200, 0);
+        });
+
+        // 1秒ごとに実行される処理
+        let fallSpeed = 1.0; // 最初は1秒ごと
+
+        loop(fallSpeed, () => {
+            // 「currentBlock」という目印がついたオブジェクトを探します
+            const current = get("currentBlock")[0];
+
+            if (current) {
+                // 下に1マス分（32ピクセル）動かします
+                current.pos.y += 32;
+            }
+        });
+    </script>
+</body>
+</html>
