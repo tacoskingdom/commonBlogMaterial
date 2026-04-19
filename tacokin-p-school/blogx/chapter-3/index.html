@@ -14,12 +14,50 @@
             background: [0, 0, 0], // 背景を黒色に設定
         });
 
+        // 1. レイヤーを定義
+        layers(["bg", "game", "ui"], "game");
         const COLS = 10;
         const ROWS = 20;
 
         // 10x20のグリッドを空（null）で初期化します
         let grid = Array.from({ length: ROWS }, () => Array(COLS).fill(null));
 
+        // // 2. マップデータの定義（配列や文字列）
+        // const map = [
+        //     "==============",
+        //     "=            =",
+        //     "=            =",
+        //     "=    ====    =",
+        //     "=            =",
+        //     "==============",
+        // ];
+        // const gridMap = grid.map
+        // // 3. マップの描画と設定
+        // addLevel(map, {
+        //     tileWidth: 32,  // タイルの幅
+        //     tileHeight: 32, // タイルの高さ
+        //     tiles: {
+        //         any: (ch) => [
+        //             "level-block",
+        //         ],
+        //         "=": () => [
+        //             // sprite("wall"),
+        //             rect(32, 32),
+        //             color([1, 32, 211]),
+        //             outline(2), // 枠線をつけるとテトリスらしくなります
+        //             // area(),
+        //             // body({ isStatic: true }), // 物理演算が必要な場合
+        //             // anchor("center"),
+        //         ],
+        //         " ": () => [
+        //             rect(32, 32),
+        //             color([51, 132, 22]),
+        //             outline(2), // 枠線をつけるとテトリスらしくなります
+        //             // sprite("grass"), // 背景用のタイル
+        //             // anchor("center"),
+        //         ],
+        //     },
+        // });
 
         // ブロックの形（デザイン）を定義します
         const SHAPES = {
@@ -43,6 +81,42 @@
             "L": [77, 199, 201],
         };
 
+        // 背景を描画する関数
+        function drawBackground(grid, cellSize) {
+            // 1. ブロック全体をまとめる「親」となるオブジェクトを作成
+            const blockParent = add([
+                pos(0, 0),
+                layer("bg"), // 最背面のレイヤー
+                "background", // 後で操作するために目印（タグ）をつけておく
+            ]);
+
+            // 2. 2次元配列をループで回して、1が入っている場所に四角形（セル）を追加する
+            grid.forEach((row, rowIndex) => {
+                row.forEach((cell, colIndex) => {
+                    if (cell == null) {
+                        // 親オブジェクト(blockParent)に子要素として追加
+                        blockParent.add([
+                            rect(cellSize, cellSize),
+                            pos(colIndex * cellSize, rowIndex * cellSize),
+                            color([0, 0, 0]),
+                        ]);
+                    }
+                    else {
+                        blockParent.add([
+                            rect(cellSize, cellSize),
+                            pos(colIndex * cellSize, rowIndex * cellSize),
+                            color(cell),
+                            outline(2),
+                        ]);
+                    }
+                });
+            });
+        }
+
+        // 背景を初期化
+        drawBackground(grid, 32);
+
+        // ブロックの初期化
         let [player, shape, colorRGB] = spawnBlock();
 
         function spawnBlock() {
@@ -67,14 +141,21 @@
 
         // 「上」キーが押されている間、回転
         onKeyPress("up", () => {
-            shape = _rotate(shape);
+            const nextShape = _rotate(shape);
             const _x = player.pos.x;
             const _y = player.pos.y;
-            destroy(player);
-            [player, shape, colorRGB] = drawBlock(shape, colorRGB, _x, _y, 32);
-            // Kaplayのビルドインrotateは利用しない
-            // const angle = player.angle || 0;
-            // player.angle = angle + 90;
+            // 回転できるかを判定
+            const flag = canMove(nextShape, _x/32, _y/32);
+
+            if (flag) {
+                // 回転できる場合の処理
+                destroy(player);
+                [player, shape, colorRGB] = drawBlock(nextShape, colorRGB, _x, _y, 32);
+                // Kaplayのビルドインrotateは利用しない
+                // const angle = player.angle || 0;
+                // player.angle = angle + 90;
+            }
+
         });
 
 
@@ -83,6 +164,7 @@
             // 1. ブロック全体をまとめる「親」となるオブジェクトを作成
             const blockParent = add([
                 pos(startX, startY),
+                layer("game"), //レイヤー
                 "currentBlock", // 後で操作するために目印（タグ）をつけておく
             ]);
 
@@ -96,8 +178,6 @@
                             pos(colIndex * cellSize, rowIndex * cellSize),
                             color(colorRGB),
                             outline(2), // 枠線をつけるとテトリスらしくなります
-                            // rotate(0),
-                            // anchor("center"), // ★ここが重要：アンカーを中央に設定
                         ]);
                     }
                 });
@@ -133,25 +213,17 @@
         }
 
         function lockBlock(shape, posX, posY, color) {
-            const current = get("currentBlock")[0];
-            // const { shape, pos, color } = current;
-
             // グリッドに色情報を保存
             shape.forEach((row, y) => {
                 row.forEach((value, x) => {
                     if (value) {
-                        const gx = Math.floor(pos.x / 32) + x;
-                        const gy = Math.floor(pos.y / 32) + y;
+                        const gx = Math.floor(posX / 32) + x;
+                        const gy = Math.floor(posY / 32) + y;
                         if (gy >= 0) grid[gy][gx] = color;
                     }
                 });
             });
-
-            // 操作中のブロックを消して、新しいブロックを出す
-            // destroy(current);
-            // spawnBlock();
         }
-
 
         // 1秒ごとに実行される処理
         let fallSpeed = 1.0; // 最初は1秒ごと
@@ -159,17 +231,22 @@
         loop(fallSpeed, () => {
             // 「currentBlock」という目印がついたオブジェクトを探します
             const current = get("currentBlock")[0];
+            const bg = get("background")[0];
 
             if (current) {
-                // 下に1マス分（32ピクセル）動かします
-                current.pos.y += 32;
                 //接地のチェック
-                // console.log(shape);
-                // console.log(current.pos.x/32);
-                // console.log(current.pos.y/32);
-                const flag = canMove(shape, current.pos.x/32, current.pos.y/32);
-                // console.log(flag);
-                if(!flag) {
+                const flag = canMove(shape, current.pos.x/32, (current.pos.y + 32)/32);
+                if(flag) {
+                    // 下に1マス分（32ピクセル）動かします
+                    current.pos.y += 32;
+                } else {
+                    // ブロックの固定
+                    lockBlock(shape, current.pos.x, current.pos.y, colorRGB);
+
+                    // 背景の更新
+                    destroy(bg);
+                    drawBackground(grid, 32);
+
                     // 操作中のブロックを消して、新しいブロックを出す
                     destroy(current);
                     [player, shape, colorRGB] = spawnBlock();
