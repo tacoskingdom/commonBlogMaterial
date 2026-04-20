@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaplayの学習</title>
+</head>
+<body>
+    <script type="module">
+        import kaplay from "https://unpkg.com/kaplay@3001.0.19/dist/kaplay.mjs";
+        kaplay({
+            width: 320,      // 画面の横幅
+            height: 640,     // 画面の高さ
+            background: [0, 0, 0], // 背景を黒色に設定
+        });
+
+        // 1. レイヤーを定義
+        layers(["bg", "game", "ui"], "game");
+        const COLS = 10;
+        const ROWS = 20;
+
+        // 10x20のグリッドを空（null）で初期化します
+        let grid = Array.from({ length: ROWS }, () => Array(COLS).fill(null));
+
+        // ブロックの形（デザイン）を定義します
+        const SHAPES = {
+            "I": [ [1, 1, 1, 1] ],
+            "O": [ [1, 1], [1, 1] ],
+            "T": [ [0, 1, 0], [1, 1, 1] ],
+            "S": [ [0, 1, 1], [1, 1, 0] ],
+            "Z": [ [1, 1, 0], [0, 1, 1] ],
+            "J": [ [1, 0, 0], [1, 1, 1] ],
+            "L": [ [0, 0, 1], [1, 1, 1] ],
+        };
+
+        // ブロックごとの色も決めておきましょう
+        const COLORS = {
+            "I": [0, 255, 255], // 水色
+            "O": [255, 255, 0], // 黄色
+            "T": [255, 0, 255], // 紫色
+            "S": [122, 13, 45],
+            "Z": [101, 76, 22],
+            "J": [16, 117, 66],
+            "L": [77, 199, 201],
+        };
+
+        scene("main", () => {
+            // 背景を描画する関数
+            function drawBackground(grid, cellSize) {
+                // 1. ブロック全体をまとめる「親」となるオブジェクトを作成
+                const blockParent = add([
+                    pos(0, 0),
+                    layer("bg"), // 最背面のレイヤー
+                    "background", // 後で操作するために目印（タグ）をつけておく
+                ]);
+
+                // 2. 2次元配列をループで回して、1が入っている場所に四角形（セル）を追加する
+                grid.forEach((row, rowIndex) => {
+                    row.forEach((cell, colIndex) => {
+                        if (cell == null) {
+                            // 親オブジェクト(blockParent)に子要素として追加
+                            blockParent.add([
+                                rect(cellSize, cellSize),
+                                pos(colIndex * cellSize, rowIndex * cellSize),
+                                color([0, 0, 0]),
+                            ]);
+                        }
+                        else {
+                            blockParent.add([
+                                rect(cellSize, cellSize),
+                                pos(colIndex * cellSize, rowIndex * cellSize),
+                                color(cell),
+                                outline(2),
+                            ]);
+                        }
+                    });
+                });
+            }
+
+            // 背景を初期化
+            drawBackground(grid, 32);
+
+            // ブロックの初期化
+            let [player, shape, colorRGB] = spawnBlock();
+
+            function spawnBlock() {
+                // 形の名前（I, O, Tなど）をランダムに1つ選びます
+                const shapeType = choose(["I", "O", "T", "S", "Z", "J", "L"]);
+                const shape = SHAPES[shapeType];
+                const colorRGB = COLORS[shapeType] || [0, 255, 255]; // デフォルトは水色
+                return drawBlock(shape, colorRGB, width() / 2, 0, 32);
+            }
+
+            // 「左」キーが押されている間、左に動かす
+            onKeyPress("left", () => {
+                const flag = canMove(shape, (player.pos.x - 32)/32, player.pos.y/32);
+                if (flag) player.pos.x -= 32;
+            });
+
+            // 「右」キーが押されている間、右に動かす
+            onKeyPress("right", () => {
+                const flag = canMove(shape, (player.pos.x + 32)/32, player.pos.y/32);
+                if (flag) player.pos.x += 32;
+            });
+
+            // 「上」キーが押されている間、回転
+            onKeyPress("up", () => {
+                const nextShape = _rotate(shape);
+                const _x = player.pos.x;
+                const _y = player.pos.y;
+                // 回転できるかを判定
+                const flag = canMove(nextShape, _x/32, _y/32);
+
+                if (flag) {
+                    // 回転できる場合の処理
+                    destroy(player);
+                    [player, shape, colorRGB] = drawBlock(nextShape, colorRGB, _x, _y, 32);
+                    // Kaplayのビルドインrotateは利用しない
+                    // const angle = player.angle || 0;
+                    // player.angle = angle + 90;
+                }
+            });
+
+            // 1つのブロックを描画する関数
+            function drawBlock(shape, colorRGB, startX, startY, cellSize) {
+                // 1. ブロック全体をまとめる「親」となるオブジェクトを作成
+                const blockParent = add([
+                    pos(startX, startY),
+                    layer("game"), //レイヤー
+                    "currentBlock", // 後で操作するために目印（タグ）をつけておく
+                ]);
+
+                // 2. 2次元配列をループで回して、1が入っている場所に四角形（セル）を追加する
+                shape.forEach((row, rowIndex) => {
+                    row.forEach((cell, colIndex) => {
+                        if (cell === 1) {
+                            // 親オブジェクト(blockParent)に子要素として追加
+                            blockParent.add([
+                                rect(cellSize, cellSize),
+                                pos(colIndex * cellSize, rowIndex * cellSize),
+                                color(colorRGB),
+                                outline(2), // 枠線をつけるとテトリスらしくなります
+                            ]);
+                        }
+                    });
+                });
+
+                return [blockParent, shape, colorRGB];
+            }
+
+            // 使い方
+            // matrix = [ [0, 1, 0], [1, 1, 1] ]; (T字型)
+            // newMatrix = rotate(matrix); -> [ [1, 0], [1, 1], [1, 0] ] に変わる！
+            function _rotate(matrix) {
+                // 行と列を入れ替えて、左右を反転させることで90度回転を実現します
+                return matrix[0].map((_, index) => matrix.map(row => row[index]).reverse());
+            }
+
+
+            function canMove(shape, gridX, gridY) {
+                for (let y = 0; y < shape.length; y++) {
+                    for (let x = 0; x < shape[y].length; x++) {
+                        if (shape[y][x]) {
+                            const nextX = gridX + x;
+                            const nextY = gridY + y;
+
+                            // 壁や床を突き抜けていないか？
+                            if (nextX < 0 || nextX >= COLS || nextY >= ROWS) return false;
+                            // 他のブロックと重なっていないか？
+                            if (nextY >= 0 && grid[nextY][nextX]) return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
+            function lockBlock(shape, posX, posY, color) {
+                // グリッドに色情報を保存
+                shape.forEach((row, y) => {
+                    row.forEach((value, x) => {
+                        if (value) {
+                            const gx = Math.floor(posX / 32) + x;
+                            const gy = Math.floor(posY / 32) + y;
+                            if (gy >= 0) grid[gy][gx] = color;
+                        }
+                    });
+                });
+            }
+
+            function clearLines() {
+                let linesCleared = 0;
+
+                // 下の行から順番にチェック
+                for (let y = ROWS - 1; y >= 0; y--) {
+                    // every関数を使って、全てのセルがnull（空）じゃないか確認
+                    if (grid[y].every(cell => cell !== null)) {
+                        // 揃っていたら、その行を削除！
+                        grid.splice(y, 1);
+                        // 一番上に空の行を新しく追加
+                        grid.unshift(Array(COLS).fill(null));
+                        // 行がズレたので、同じ行をもう一度チェックするためにyを増やします
+                        y++;
+                        linesCleared++;
+                    }
+                }
+                return linesCleared;
+            }
+
+            let score = 0;
+
+            // スコアを表示するテキストオブジェクト
+            const scoreLabel = add([
+                text(`SCORE: ${score}`, { size: 24 }),
+                pos(10, 10),
+                layer("ui"), // Part3で作ったUIレイヤーに配置
+            ]);
+
+            function updateScore(clearedCount) {
+                // 1行なら100点、4行同時なら800点！
+                const points = [0, 100, 300, 500, 800];
+                score += points[clearedCount] || 0;
+
+                // 画面の表示を更新
+                scoreLabel.text = `SCORE: ${score}`;
+            }
+
+                    // 1秒ごとに実行される処理
+            let fallSpeed = 0.5; // 最初は1秒ごと
+
+            loop(fallSpeed, () => {
+                // 「currentBlock」という目印がついたオブジェクトを探します
+                const current = get("currentBlock")[0];
+                const bg = get("background")[0];
+
+                if (current) {
+                    //接地のチェック
+                    const flag = canMove(shape, current.pos.x/32, (current.pos.y + 32)/32);
+                    if(flag) {
+                        // 下に1マス分（32ピクセル）動かします
+                        current.pos.y += 32;
+                    } else {
+                        // ブロックの固定
+                        lockBlock(shape, current.pos.x, current.pos.y, colorRGB);
+
+                        // 消去された行数
+                        const lines = clearLines();
+                        if (lines > 0) {
+                            // スコア更新
+                            updateScore(lines);
+                        }
+
+                        // 背景の更新
+                        destroy(bg);
+                        drawBackground(grid, 32);
+
+                        // 操作中のブロックを消して、新しいブロックを出す
+                        destroy(current);
+                        const [newPlayer, newShape, newColor] = spawnBlock();
+
+                        // 5. 【重要】新しいブロックが置けるかチェック（ゲームオーバー判定）
+                        if (!canMove(newShape, newPlayer.pos.x / 32, newPlayer.pos.y / 32)) {
+                            go("gameover", score);
+                        }
+
+                        // 変数の更新（次のブロックを操作対象にする）
+                        player = newPlayer;
+                        shape = newShape;
+                        colorRGB = newColor;
+
+                    }
+                }
+            });
+        });
+
+        // シーンの切り替えを使ってゲームオーバーを表現します
+        scene("gameover", (finalScore) => {
+            add([
+                text("GAME OVER", { size: 48 }),
+                pos(center()),
+                anchor("center"),
+            ]);
+
+            add([
+                text(`Final Score: ${finalScore}`, { size: 24 }),
+                pos(center().x, center().y + 60),
+                anchor("center"),
+            ]);
+
+            // 何かキーを押したら再挑戦！
+            onKeyPress(() => go("main"));
+        });
+
+        go("main");
+
+    </script>
+</body>
+</html>
