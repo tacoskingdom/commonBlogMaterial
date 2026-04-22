@@ -69,32 +69,22 @@
         function spawnBlock() {
             // 形の名前（I, O, Tなど）をランダムに1つ選びます
             const shapeType = choose(["I", "O", "T", "S", "Z", "J", "L"]);
-            // const shape = SHAPES[shapeType];
-            // const colorRGB = COLORS[shapeType];
-            // 選ばれたブロックを画面のてっぺんに追加します
-            // const block = add([
-            //     rect(32, 32), // 今回はとりあえず一つのパーツとして表示
-            //     pos(width() / 2, 0),
-            //     color(colorRGB),
-            //     "currentBlock", // 「操作中のブロック」という目印をつけます
-            // ]);
+
             return drawBlock(shapeType, width() / 2, 0, 32);
         }
 
         let player = spawnBlock();
 
-        // 「左」キーが押されている間、左に動かす
-        onKeyDown("left", () => {
+        onKeyPress("left", () => {
             player.move(-200, 0);
         });
 
-        // 「右」キーが押されている間、右に動かす
-        onKeyDown("right", () => {
+        onKeyPress("right", () => {
             player.move(200, 0);
         });
 
         // 1秒ごとに実行される処理
-        let fallSpeed = 1.0; // 最初は1秒ごと
+        let fallSpeed = 1.0;
 
         loop(fallSpeed, () => {
             // 「currentBlock」という目印がついたオブジェクトを探します
