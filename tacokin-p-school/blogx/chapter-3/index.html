@@ -22,43 +22,6 @@
         // 10x20のグリッドを空（null）で初期化します
         let grid = Array.from({ length: ROWS }, () => Array(COLS).fill(null));
 
-        // // 2. マップデータの定義（配列や文字列）
-        // const map = [
-        //     "==============",
-        //     "=            =",
-        //     "=            =",
-        //     "=    ====    =",
-        //     "=            =",
-        //     "==============",
-        // ];
-        // const gridMap = grid.map
-        // // 3. マップの描画と設定
-        // addLevel(map, {
-        //     tileWidth: 32,  // タイルの幅
-        //     tileHeight: 32, // タイルの高さ
-        //     tiles: {
-        //         any: (ch) => [
-        //             "level-block",
-        //         ],
-        //         "=": () => [
-        //             // sprite("wall"),
-        //             rect(32, 32),
-        //             color([1, 32, 211]),
-        //             outline(2), // 枠線をつけるとテトリスらしくなります
-        //             // area(),
-        //             // body({ isStatic: true }), // 物理演算が必要な場合
-        //             // anchor("center"),
-        //         ],
-        //         " ": () => [
-        //             rect(32, 32),
-        //             color([51, 132, 22]),
-        //             outline(2), // 枠線をつけるとテトリスらしくなります
-        //             // sprite("grass"), // 背景用のタイル
-        //             // anchor("center"),
-        //         ],
-        //     },
-        // });
-
         // ブロックの形（デザイン）を定義します
         const SHAPES = {
             "I": [ [1, 1, 1, 1] ],

@@ -21,14 +21,14 @@
             area(),                  // 当たり判定をつける
         ]);
 
-        // 「左」キーが押されている間、左に動かす
-        onKeyDown("left", () => {
-            player.move(-200, 0);
+        // 「左」キーで左に動かす
+        onKeyPress("left", () => {
+            player.move(-32, 0);
         });
 
-        // 「右」キーが押されている間、右に動かす
-        onKeyDown("right", () => {
-            player.move(200, 0);
+        // 「右」キーで右に動かす
+        onKeyPress("right", () => {
+            player.move(32, 0);
         });
     </script>
 </body>
