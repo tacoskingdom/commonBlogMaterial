@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <script src="https://cdn.jsdelivr.net/npm/rot-js@2.2.1/dist/rot.js"></script>
+     <script src="https://unpkg.com/kaplay@3001.0.19/dist/kaplay.js"></script>
+    <title>ローグを作ろう！</title>
+</head>
+<body>
+    <script>
+    const cols = 18;//横ブロック数
+    const rows = 18;//縦ブロック数
+
+    //シード値固定(固定しない)場合にはランダム
+    // const seed = 4321;
+    // ROT.RNG.setSeed(seed);
+
+    //マップ配列
+    const mapArray = new Array(cols);
+    for (let i = 0; i < cols; i++) {
+        mapArray[i] = new Array(rows);
+    }
+
+    //rot.jsでマップデータを生成
+    const map = new ROT.Map.Digger(
+        cols,
+        rows,
+        {
+            roomWidth: [2, 3],
+            roomHeight: [2, 3],
+        }
+    );
+
+    //マップ配列に情報を書き込む
+    map.create(function (x, y, type) {
+        mapArray[x][y] = type;
+    });
+
+    kaplay({
+        width: 16*cols,      // 画面の横幅
+        height: 16*rows,     // 画面の高さ
+        background: [0, 0, 0], // 背景を黒色に設定
+    });
+    loadSprite("grass", "grass.jpg");
+    loadSprite("ground", "ground.jpg");
+
+
+    // 2. マップデータの定義（配列や文字列）
+    const tileMap = mapArray.map(row => {
+        return row.map(cell => {
+            return cell == 1 ? "=" : " ";
+        }).join("");
+    });
+
+    // 3. マップの描画と設定
+    addLevel(tileMap, {
+        tileWidth: 16,  // タイルの幅
+        tileHeight: 16, // タイルの高さ
+        tiles: {
+            any: (ch) => [
+                "level-block",
+            ],
+            "=": () => [
+                sprite("grass", {width: 16, height: 16}),
+            ],
+            " ": () => [
+                sprite("ground", {width: 16, height: 16}),
+            ],
+        },
+    });
+
+    </script>
+</body>
+</html>

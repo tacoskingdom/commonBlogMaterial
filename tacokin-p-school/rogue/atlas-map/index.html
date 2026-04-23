@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <script src="https://cdn.jsdelivr.net/npm/rot-js@2.2.1/dist/rot.js"></script>
+     <script src="https://unpkg.com/kaplay@3001.0.19/dist/kaplay.js"></script>
+    <title>ローグを作ろう！</title>
+</head>
+<body>
+    <script>
+    const cols = 18;//横ブロック数
+    const rows = 18;//縦ブロック数
+
+    //マップ配列
+    const mapArray = new Array(cols);
+    for (let i = 0; i < cols; i++) {
+        mapArray[i] = new Array(rows);
+    }
+
+    //rot.jsでマップデータを生成
+    const map = new ROT.Map.Digger(
+        cols,
+        rows,
+        {
+            roomWidth: [2, 3],
+            roomHeight: [2, 3],
+        }
+    );
+
+    //マップ配列に情報を書き込む
+    map.create(function (x, y, type) {
+        mapArray[x][y] = type;
+    });
+
+    kaplay({
+        width: 32*cols,      // 画面の横幅
+        height: 32*rows,     // 画面の高さ
+        background: [0, 0, 0], // 背景を黒色に設定
+    });
+
+    loadSpriteAtlas("BrightForest-A2.png", {
+        "grass": {
+            x: 0, // 開始X座標
+            y: 0, // 開始Y座標
+            width: 32, // スプライト幅
+            height: 32, // スプライト高さ
+        },
+        "ground": {
+            x: 160, // 開始X座標
+            y: 0, // 開始Y座標
+            width: 32, // スプライト幅
+            height: 32, // スプライト高さ
+        },
+    });
+
+    // 2. マップデータの定義（配列や文字列）
+    const tileMap = mapArray.map(row => {
+        return row.map(cell => {
+            return cell == 1 ? "=" : " ";
+        }).join("");
+    });
+
+    // 3. マップの描画と設定
+    addLevel(tileMap, {
+        tileWidth: 32,  // タイルの幅
+        tileHeight: 32, // タイルの高さ
+        tiles: {
+            any: (ch) => [
+                "level-block",
+            ],
+            "=": () => [
+                // 背景用のタイル
+                sprite("grass", {width: 32, height: 32, tiled: true}),
+            ],
+            " ": () => [
+                sprite("ground", {width: 32, height: 32, tiled: true}),
+            ],
+        },
+    });
+
+    </script>
+</body>
+</html>
