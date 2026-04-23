@@ -12,10 +12,6 @@
     const cols = 18;//横ブロック数
     const rows = 18;//縦ブロック数
 
-    //シード値固定(固定しない)場合にはランダム
-    // const seed = 4321;
-    // ROT.RNG.setSeed(seed);
-
     //マップ配列
     const mapArray = new Array(cols);
     for (let i = 0; i < cols; i++) {
@@ -38,13 +34,25 @@
     });
 
     kaplay({
-        width: 16*cols,      // 画面の横幅
-        height: 16*rows,     // 画面の高さ
+        width: 32*cols,      // 画面の横幅
+        height: 32*rows,     // 画面の高さ
         background: [0, 0, 0], // 背景を黒色に設定
     });
-    loadSprite("grass", "grass.jpg");
-    loadSprite("ground", "ground.jpg");
 
+    loadSpriteAtlas("BrightForest-A2.png", {
+        "grass": {
+            x: 0, // 開始X座標
+            y: 0, // 開始Y座標
+            width: 32, // スプライト幅
+            height: 32, // スプライト高さ
+        },
+        "ground": {
+            x: 160, // 開始X座標
+            y: 0, // 開始Y座標
+            width: 32, // スプライト幅
+            height: 32, // スプライト高さ
+        },
+    });
 
     // 2. マップデータの定義（配列や文字列）
     const tileMap = mapArray.map(row => {
@@ -55,17 +63,18 @@
 
     // 3. マップの描画と設定
     addLevel(tileMap, {
-        tileWidth: 16,  // タイルの幅
-        tileHeight: 16, // タイルの高さ
+        tileWidth: 32,  // タイルの幅
+        tileHeight: 32, // タイルの高さ
         tiles: {
             any: (ch) => [
                 "level-block",
             ],
             "=": () => [
-                sprite("grass", {width: 16, height: 16}),
+                // 背景用のタイル
+                sprite("grass", {width: 32, height: 32, tiled: true}),
             ],
             " ": () => [
-                sprite("ground", {width: 16, height: 16}),
+                sprite("ground", {width: 32, height: 32, tiled: true}),
             ],
         },
     });
