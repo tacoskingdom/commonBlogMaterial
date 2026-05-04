@@ -12,15 +12,20 @@
         mapArray[i] = new Array(rows);
     }
 
-    const dungeon = new ROT.Map.Digger(cols, rows);
+    const dungeon = new ROT.Map.Digger(cols, rows, {
+        roomWidth: [3, 4],
+        roomHeight: [3, 5],
+    });
     //マップ配列に情報を書き込む
     dungeon.create((x, y, type) => {
         // type: 0=床(.), 1=壁(#)
         mapArray[x][y] = type;
     });
 
-    //床(0)に隣接した壁を2へ変更
-    const checkWall = (map) => {
+    const sourceMap = [...mapArray];
+
+    //床(0)に隣接した壁(2)へ変更
+    const replaceWall = (map) => {
         for (let i=1; i< map.length-1; i++) {
             for (let j=1; j< map[i].length-1; j++) {
                 if (map[i][j] == 0) {
@@ -36,7 +41,7 @@
             }
         }
     };
-    checkWall(mapArray);
+    replaceWall(mapArray);
 
     // マップデータ（文字列配列）へ変更
     const mapStrings = mapArray.map(row => row.map(cell => {
@@ -63,18 +68,24 @@
         tiles: {
             ".": () => [
                 k.sprite("floor", {width: 32, height: 32}),
-                "floor",
+                k.opacity(0), // 最初は真っ暗
+                "tile",
+                { seen: false, isWall: false }
             ],
             "#": () => [
                 k.rect(32, 32),
                 k.color(25, 25, 25),
                 "bulk",
+                k.opacity(0), // 最初は真っ暗
+                "tile",
+                { seen: false, isWall: false }
             ],
             "=": () => [
                 k.sprite("wall", {width: 32, height: 32}),
-                // k.area(),
-                // k.body({ isStatic: true }), // 壁は動かない＆ぶつかる
+                k.opacity(0), // 最初は真っ暗
                 "wall",
+                "tile",
+                { seen: false, isWall: false }
             ],
         },
     });
@@ -95,46 +106,98 @@
         const targetObj = objects.find(obj => {
             return obj.pos.x == x && obj.pos.y == y
         });
-
-        if (targetObj) {
-            // オブジェクトが見つかった場合true
-            return true;
-        }
-        return false;
+        return !!targetObj; // 壁があれば true, なければ false
     }
 
     let lock = false;
 
-    k.onKeyPress("left", () => {
-        const anchor = player.pos.add(-TILE_SIZE, 0);
+    k.onKeyPress((key) => {
+        if (lock) return;
+
+        let anchor = player.pos;
+        switch(key) {
+            case "left":
+                anchor = anchor.add(-TILE_SIZE, 0);
+                break;
+            case "right":
+                anchor = anchor.add(TILE_SIZE, 0);
+                break;
+            case "up":
+                anchor = anchor.add(0, -TILE_SIZE);
+                break;
+            case "down":
+                anchor = anchor.add(0, TILE_SIZE);
+                break;
+            default:
+                return;
+        }
+
         if (checkForward(anchor.x, anchor.y)) return;
-        player.pos.x -= TILE_SIZE;
-        // lock = true;
-        // k.tween(player.pos, anchor, 0.2, (p) => {
-        //     player.pos = p;
-        //     if (p == anchor) lock = false;
-        // }, k.easings.linear);
+
+        const interval = 0.3;
+        lock = true;
+        // 移動が終わったタイミング、または移動アニメーションの開始時に実行
+        updateFov();
+        k.tween(player.pos, anchor, interval, (p) => {
+            player.pos = p;
+        }, k.easings.linear).onEnd(() => {
+            lock = false;
+            k.debug.log("移動完了！");
+            updateFov();
+        });
     });
 
-    k.onKeyPress("right", () => {
-        const anchor = player.pos.add(TILE_SIZE, 0);
-        if (checkForward(anchor.x, anchor.y)) return;
-        player.pos.x += TILE_SIZE;
-        // k.tween(player.pos, anchor, 0.2, (p) => player.pos = p, k.easings.linear);
+
+    // 1. 視界計算の準備（光を通すかどうかの判定）
+    const fov = new ROT.FOV.PreciseShadowcasting((x, y) => {
+        // mapArray は第3回で作ったマップデータ（0=床, 1=壁）
+        // 床(0)なら光を通す
+        // return mapArray[x]?.[y] === 0; 
+        return sourceMap[x]?.[y] === 0; 
     });
 
-    k.onKeyPress("up", () => {
-        const anchor = player.pos.add(0, -TILE_SIZE);
-        if (checkForward(anchor.x, anchor.y)) return;
-        player.pos.y -= TILE_SIZE;
-        // k.tween(player.pos, anchor, 0.2, (p) => player.pos = p, k.easings.linear);
-    });
+    // 2. 視界を更新する関数
+    const updateFov = () => {
+        // 現在の視界をリセット（すべて見えない状態にする）
+        const allTiles = level.get("tile");
+        allTiles.forEach(t => {
+            t.visible = false; // KAPLAYの表示フラグ
+        });
 
-    k.onKeyPress("down", () => {
-        const anchor = player.pos.add(0, TILE_SIZE);
-        if (checkForward(anchor.x, anchor.y)) return;
-        player.pos.y += TILE_SIZE;
-        // k.tween(player.pos, anchor, 0.2, (p) => player.pos = p, k.easings.linear);
-    });
+        // プレイヤーのグリッド座標を取得（TILE_SIZEで割る）
+        const px = Math.floor(player.pos.x / TILE_SIZE);
+        const py = Math.floor(player.pos.y / TILE_SIZE);
+
+        // 3. 半径6マスの範囲で視界を計算
+        fov.compute(px, py, 6, (x, y, r, visibility) => {
+            if (visibility > 0) {
+                // 視界に入ったタイルを探す
+                const tilesAtPos = allTiles.filter(t => 
+                    Math.floor(t.pos.x / TILE_SIZE) === x && 
+                    Math.floor(t.pos.y / TILE_SIZE) === y
+                );
+
+                tilesAtPos.forEach(t => {
+                    t.visible = true; // 今見えている
+                    t.seen = true;    // 一度見た！
+                });
+            }
+        });
+
+        // 4. 見た目に反映させる
+        allTiles.forEach(t => {
+            if (t.visible) {
+                t.opacity = 1; // 視界内はハッキリ
+                t.color = k.WHITE;
+            } else if (t.seen) {
+                t.opacity = 0.3; // 探索済みは薄暗く
+                t.color = k.rgb(100, 100, 150); // 少し青みがけるとかっこいい！
+            } else {
+                t.opacity = 0; // 未探索は真っ暗
+            }
+        });
+    };
+
+    updateFov();
 
 </script>
