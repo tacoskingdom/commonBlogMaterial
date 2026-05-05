@@ -67,7 +67,7 @@
         tileHeight: TILE_SIZE,
         tiles: {
             ".": () => [
-                k.sprite("floor", {width: 32, height: 32}),
+                k.sprite("floor", {width: TILE_SIZE, height: TILE_SIZE}),
                 k.opacity(0), // 最初は真っ暗
                 "tile",
                 { seen: false, isWall: false }
@@ -76,12 +76,9 @@
                 k.rect(32, 32),
                 k.color(25, 25, 25),
                 "bulk",
-                // k.opacity(0), // 最初は真っ暗
-                // "tile",
-                // { seen: false, isWall: true }
             ],
             "=": () => [
-                k.sprite("wall", {width: 32, height: 32}),
+                k.sprite("wall", {width: TILE_SIZE, height: TILE_SIZE}),
                 k.opacity(0), // 最初は真っ暗
                 "wall",
                 "tile",
@@ -94,11 +91,17 @@
     const rooms = dungeon.getRooms();
     const startPos = rooms[0].getCenter(); // 最初の部屋の真ん中を取得
     const player = k.add([
-        k.sprite("player", {width: 32, height: 32}),
+        k.sprite("player", {width: TILE_SIZE, height: TILE_SIZE}),
         k.pos(startPos[0] * TILE_SIZE, startPos[1] * TILE_SIZE),
         k.area(),
         k.body(),
         "player",
+        {
+            hp: 10,
+            maxHp: 10,
+            level: 1,
+            exp: 0,
+        },
     ]);
 
     const checkForward = (x, y) => {
@@ -128,6 +131,13 @@
             case "down":
                 anchor = anchor.add(0, TILE_SIZE);
                 break;
+            case "space":
+                // スペースキーで階段を降りる
+                const stairs = k.get("stairs").find(s => s.gridX === player.gridX && s.gridY === player.gridY);
+                if (stairs) {
+                    goToNextFloor();
+                }
+                return;
             default:
                 return;
         }
@@ -137,27 +147,38 @@
         const tx = anchor.x / TILE_SIZE;
         const ty = anchor.y / TILE_SIZE;
         const target = monsters.find(m =>
-            Math.floor(m.pos.x / TILE_SIZE) === tx && 
+            Math.floor(m.pos.x / TILE_SIZE) === tx &&
             Math.floor(m.pos.y / TILE_SIZE) === ty
         );
 
         if (target) {
-            // モンスターがいたら攻撃！
-            target.hp -= 1;
-            k.debug.log(`モンスターにダメージ！ 残りHP: ${target.hp}`);
-
-            // 攻撃の演出（少しだけ揺らす）
-            k.shake(1);
+            // 攻撃！
+            const damage = 1;
+            target.hp -= damage;
+            addLog("プレイヤーの攻撃！");
+            addLog(`モンスターに ${damage} のダメージ！`);
 
             if (target.hp <= 0) {
+                addLog("モンスターをたおした！");
                 k.destroy(target); // モンスターを消す
                 // 配列からも削除
                 const idx = monsters.indexOf(target);
                 monsters.splice(idx, 1);
+
+                // 経験値を獲得
+                player.exp += 1;
+                addLog("1 の経験値を得た！");
+
+                // レベルアップ判定（今回は2経験値ごとにアップ）
+                if (player.exp >= player.level * 2) {
+                    player.level++;
+                    player.maxHp += 2;
+                    player.hp = player.maxHp; // 全回復！
+                    addLog(`レベルアップ！ レベル ${player.level} になった！`);
+                }
             }
 
-            // 攻撃した後は、敵のターンへ
-            moveEnemies();
+            endTurn(); // 自分の攻撃が終わったのでターン終了
             return;
         }
 
@@ -170,9 +191,8 @@
                 player.pos = p;
             }, k.easings.linear).onEnd(() => {
                 lock = false;
-                k.debug.log("移動完了！");
                 // 移動が終わったら敵が動く
-                moveEnemies();
+                endTurn();
             });
         }
     });
@@ -210,13 +230,12 @@
         // 最初の部屋（プレイヤーがいる部屋）以外にモンスターを配置
         for (let i = 1; i < rooms.length; i++) {
             const center = rooms[i].getCenter();
-            k.debug.log(center[0], center[1]);
+
             // モンスターを生成
             const monster = k.add([
-                k.sprite("monster"), // あらかじめ loadSprite しておいてね！
+                k.sprite("monster", {width: TILE_SIZE, height: TILE_SIZE}), // あらかじめ loadSprite しておいてね！
                 k.pos(center[0] * TILE_SIZE, center[1] * TILE_SIZE),
                 k.area(),
-                // k.body(),
                 "monster",
                 {
                     hp: 3, // 体力
@@ -228,6 +247,7 @@
         }
     };
 
+    // ゲーム開始にモンスターを配置
     spawnMonsters();
 
     const moveEnemies = () => {
@@ -236,11 +256,12 @@
         const py = Math.floor(player.pos.y / TILE_SIZE);
 
         monsters.forEach(m => {
-            // 1. ダイクストラ法で「プレイヤーへの道」を計算
+            // 1. ダイクストラ法で「プレイヤーへの道すじ」を計算
             const pather = new ROT.Path.Dijkstra(px, py, (x, y) => {
                 // 床(0)なら通れる、壁(1,2)なら通れない
                 return mapArray[y]?.[x] === 0;
             }, {
+                // 移動方向を4方向に制限する(デフォルトは8方向)
                 topology: 4
             });
 
@@ -249,39 +270,212 @@
 
             let nextX = mx;
             let nextY = my;
-            let path = [];
+
             // 2. モンスターの位置から、次の一歩を教えてもらう
+            let path = [];
             pather.compute(mx, my, (x, y) => {
-                console.log("動き？", `${mx} -> ${x}`, `${my} -> ${y}`);
                 path.push([x, y]);
             });
+
+            // モンスターから見てプレイヤーまでの最短経路のうち、次のステップ位置(path[1])を取得
             if (path[1] != null) {
                 nextX = path[1][0];
                 nextY = path[1][1];
             }
-            k.debug.log("モンスターの移動", nextX, nextY);
 
             // 3. 次の位置が今の位置と同じなら動かない（道がない時など）
             if (nextX === mx && nextY === my) return;
 
             // 4. 次の位置にプレイヤーがいたら攻撃！（まだ移動はしない）
             if (nextX === px && nextY === py) {
-                k.debug.log("モンスターの攻撃！");
+                addLog("モンスターの攻撃！");
+                player.hp -= 1;
+                addLog("プレイヤーに 1 のダメージ！");
                 k.shake(2); // 画面を揺らしてダメージを表現
                 return;
             }
 
             // 5. スムーズに移動させる
-            k.debug.log("モンスター位置", m.pos);
+            // モンスターの移動位置
             const _next = k.vec2(nextX * TILE_SIZE, nextY * TILE_SIZE);
-            k.debug.log("モンスター移動位置", _next);
-            k.tween(m.pos, _next, 0.1, (p) => {
-                m.pos = p;
-            });
+            k.tween(m.pos, _next, 0.1, (p) => { m.pos = p; });
         });
     };
 
+    // ----------- UIの作成
 
+    // 1. HPバーの土台（背景のグレー）
+    const hpBarBg = k.add([
+        k.rect(200, 20),
+        k.pos(20, 20),
+        k.color(100, 100, 100),
+        k.fixed(), // 画面に固定！
+        k.z(100),   // 他のキャラより手前に表示
+    ]);
 
+    // 2. HPバー本体（赤い部分）
+    const hpBar = hpBarBg.add([
+        k.rect(200, 20),
+        k.color(255, 50, 50),
+    ]);
 
+    // 3. メッセージログ用のテキスト
+    const messages = [];
+    const logText = k.add([
+        k.text("", { size: 18, width: 400 }),
+        k.pos(20, k.height() - 120),
+        k.fixed(),
+        k.z(100),
+    ]);
+
+    /** ログに新しいメッセージを追加する関数 */
+    function addLog(msg) {
+        messages.push(msg);
+        // 最新の5件だけを表示するようにする
+        if (messages.length > 5) messages.shift();
+        logText.text = messages.join("\n");
+    }
+
+    /** HPバーの見た目を更新する関数 */
+    function updateHPBar() {
+        // 割合を計算して、赤いバーの長さを変える
+        const ratio = player.hp / player.maxHp;
+        hpBar.width = 200 * Math.max(0, ratio);
+    }
+
+    /** 敵を動かす処理を呼び出す「ターン終了」の合図 */
+    function endTurn() {
+        moveEnemies(); // 敵が動く
+        updateHPBar(); // HPを確認
+
+        if (player.hp <= 0) {
+            addLog("ゲームオーバー...");
+            k.shake(10);
+            // ここでリスタートなどの処理を入れる
+        }
+
+        // ターン終了時に階段チェック
+        const stairs = k.get("stairs").find(s => s.gridX === player.gridX && s.gridY === player.gridY);
+        if (stairs) {
+            addLog("階段がある。降りるなら [Space] キーを押そう！");
+        }
+    }
+
+    // ----------- アイテムと階段の配置処理
+
+    /** アイテムや階段を作る関数 */
+    function spawnFeature(room, type) {
+        const x = k.randi(room.getLeft(), room.getRight());
+        const y = k.randi(room.getTop(), room.getBottom());
+
+        // その位置にすでに何かがないか確認（床以外ならスキップ）
+        // ※ 実際には座標管理用のデータを使ってチェックするのが確実です
+
+        const feature = k.add([
+            k.sprite(type, { width: TILE_SIZE, height: TILE_SIZE }),
+            k.pos(x * TILE_SIZE, y * TILE_SIZE),
+            type, // "potion", "scroll", "stairs" などのタグ
+            { gridX: x, gridY: y }
+        ]);
+
+        return feature;
+    }
+
+    // マップ生成後の処理
+    // const rooms = dungeon.getRooms();
+    // 最初の部屋はプレイヤー用なので、2つ目の部屋以降に配置
+    for (let i = 1; i < rooms.length; i++) {
+        const room = rooms[i];
+        // 30%の確率でポーションを置く
+        if (k.chance(0.3)) spawnFeature(room, "potion");
+        // 20%の確率で巻物を置く
+        if (k.chance(0.2)) spawnFeature(room, "scroll");
+    }
+
+    // 最後の部屋に階段を1つ置く
+    spawnFeature(rooms[rooms.length - 1], "stairs");
+
+    // 1. Svelteのリアクティブな変数としてインベントリを定義
+    let inventory = $state([]);
+
+    /** アイテムを拾う処理 */
+    function checkItems() {
+        // プレイヤーと同じ位置にあるアイテムを探す
+        const items = k.get("potion").concat(k.get("scroll"));
+        const item = items.find(i => i.gridX === player.gridX && i.gridY === player.gridY);
+
+        if (item) {
+            addLog(`${item.is("potion") ? "ポーション" : "巻物"}を拾った！`);
+            // インベントリに追加
+            inventory.push({
+                id: Date.now(),
+                type: item.is("potion") ? "potion" : "scroll",
+                name: item.is("potion") ? "回復薬" : "魔法の巻物"
+            });
+            k.destroy(item); // 画面から消す
+        }
+    }
+
+    /** アイテムを使う処理 */
+    function useItem(index) {
+        const item = inventory[index];
+        if (item.type === "potion") {
+            player.hp = Math.min(player.maxHp, player.hp + 5);
+            addLog("体力が 5 回復した！");
+        } else {
+            addLog("不思議な力が体を包んだ！（効果はこれから！）");
+        }
+        // インベントリから削除
+        inventory.splice(index, 1);
+        updateHPBar();
+    }
+
+    let floorLevel = 1;
+
+    /** ダンジョンをリセットして新しく作る関数 */
+    function goToNextFloor() {
+        floorLevel++;
+        addLog(`地下 ${floorLevel} 階に降りた。`);
+
+        // 今あるオブジェクト（壁、敵、アイテム）を一旦全部消す
+        k.get("wall").forEach(k.destroy);
+        k.get("floor").forEach(k.destroy);
+        k.get("monster").forEach(k.destroy);
+        k.get("potion").forEach(k.destroy);
+        k.get("scroll").forEach(k.destroy);
+        k.get("stairs").forEach(k.destroy);
+
+        // マップを再生成して描画（第3回の処理をもう一度呼ぶ）
+        setupMap();
+        // プレイヤーを新しい開始位置に移動
+        const startPos = dungeon.getRooms()[0].getCenter();
+        player.gridX = startPos[0];
+        player.gridY = startPos[1];
+        player.pos = k.vec2(player.gridX * TILE_SIZE, player.gridY * TILE_SIZE);
+    }
 </script>
+
+<!-- UI部分：SvelteのHTMLとして記述 -->
+<div class="inventory-ui">
+    <h3>もちもの</h3>
+    <ul>
+        {#each inventory as item, i}
+            <li>
+                {item.name}
+                <button onclick={() => useItem(i)}>使う</button>
+            </li>
+        {/each}
+    </ul>
+</div>
+
+<style>
+    .inventory-ui {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 10px;
+        border: 2px solid #555;
+    }
+</style>
