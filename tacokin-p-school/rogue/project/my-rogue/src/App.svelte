@@ -19,10 +19,9 @@
     //マップ配列に情報を書き込む
     dungeon.create((x, y, type) => {
         // type: 0=床(.), 1=壁(#)
-        mapArray[x][y] = type;
+        // mapArray[x][y] = type;
+        mapArray[y][x] = type;
     });
-
-    const sourceMap = [...mapArray];
 
     //床(0)に隣接した壁(2)へ変更
     const replaceWall = (map) => {
@@ -58,6 +57,7 @@
     k.loadSprite("floor", "src/floor.png");
     k.loadSprite("wall", "src/wall.png");
     k.loadSprite("player", "src/player.png");
+    k.loadSprite("monster", "src/slime.png");
 
     const TILE_SIZE = 32;
 
@@ -76,16 +76,16 @@
                 k.rect(32, 32),
                 k.color(25, 25, 25),
                 "bulk",
-                k.opacity(0), // 最初は真っ暗
-                "tile",
-                { seen: false, isWall: false }
+                // k.opacity(0), // 最初は真っ暗
+                // "tile",
+                // { seen: false, isWall: true }
             ],
             "=": () => [
                 k.sprite("wall", {width: 32, height: 32}),
                 k.opacity(0), // 最初は真っ暗
                 "wall",
                 "tile",
-                { seen: false, isWall: false }
+                { seen: false, isWall: true }
             ],
         },
     });
@@ -132,72 +132,156 @@
                 return;
         }
 
-        if (checkForward(anchor.x, anchor.y)) return;
+        // 移動先にモンスターがいるかチェック
 
-        const interval = 0.3;
-        lock = true;
-        // 移動が終わったタイミング、または移動アニメーションの開始時に実行
-        updateFov();
-        k.tween(player.pos, anchor, interval, (p) => {
-            player.pos = p;
-        }, k.easings.linear).onEnd(() => {
-            lock = false;
-            k.debug.log("移動完了！");
-            updateFov();
-        });
+        const tx = anchor.x / TILE_SIZE;
+        const ty = anchor.y / TILE_SIZE;
+        const target = monsters.find(m =>
+            Math.floor(m.pos.x / TILE_SIZE) === tx && 
+            Math.floor(m.pos.y / TILE_SIZE) === ty
+        );
+
+        if (target) {
+            // モンスターがいたら攻撃！
+            target.hp -= 1;
+            k.debug.log(`モンスターにダメージ！ 残りHP: ${target.hp}`);
+
+            // 攻撃の演出（少しだけ揺らす）
+            k.shake(1);
+
+            if (target.hp <= 0) {
+                k.destroy(target); // モンスターを消す
+                // 配列からも削除
+                const idx = monsters.indexOf(target);
+                monsters.splice(idx, 1);
+            }
+
+            // 攻撃した後は、敵のターンへ
+            moveEnemies();
+            return;
+        }
+
+        // 壁がなければ移動
+        if (!checkForward(anchor.x, anchor.y)) {
+            const interval = 0.3;
+            lock = true;
+
+            k.tween(player.pos, anchor, interval, (p) => {
+                player.pos = p;
+            }, k.easings.linear).onEnd(() => {
+                lock = false;
+                k.debug.log("移動完了！");
+                // 移動が終わったら敵が動く
+                moveEnemies();
+            });
+        }
     });
 
+    // 視界の広さを決める（160ピクセル ＝ タイル5枚分くらい）
+    const VISION_RADIUS = 160;
 
-    // 1. 視界計算の準備（光を通すかどうかの判定）
-    const fov = new ROT.FOV.PreciseShadowcasting((x, y) => {
-        // mapArray は第3回で作ったマップデータ（0=床, 1=壁）
-        // 床(0)なら光を通す
-        // return mapArray[x]?.[y] === 0; 
-        return sourceMap[x]?.[y] === 0; 
+    // 全てのタイルに対して、プレイヤーとの距離をチェックする
+    k.onUpdate("tile", (t) => {
+        // 1. プレイヤーとタイルの距離（ピクセル）を計算
+        const d = t.pos.dist(player.pos);
+
+        if (d < VISION_RADIUS) {
+            // 2. 視界内：ハッキリ見える
+            t.opacity = 1;
+            t.color = k.rgb(255, 255, 255);
+            t.seen = true; // 探索済みにする
+        } else if (t.seen) {
+            // 3. 探索済み：一度見た場所は「薄暗く」表示
+            t.opacity = 0.4;
+            t.color = k.rgb(100, 100, 150); // 少し青みがけると雰囲気が出る！
+        } else {
+            // 4. 未探索：まだ見ていない場所は真っ暗
+            t.opacity = 0;
+        }
     });
 
-    // 2. 視界を更新する関数
-    const updateFov = () => {
-        // 現在の視界をリセット（すべて見えない状態にする）
-        const allTiles = level.get("tile");
-        allTiles.forEach(t => {
-            t.visible = false; // KAPLAYの表示フラグ
-        });
+    // ----------- Monsters!
 
-        // プレイヤーのグリッド座標を取得（TILE_SIZEで割る）
+    const monsters = [];
+
+    const spawnMonsters = () => {
+        const rooms = dungeon.getRooms();
+
+        // 最初の部屋（プレイヤーがいる部屋）以外にモンスターを配置
+        for (let i = 1; i < rooms.length; i++) {
+            const center = rooms[i].getCenter();
+            k.debug.log(center[0], center[1]);
+            // モンスターを生成
+            const monster = k.add([
+                k.sprite("monster"), // あらかじめ loadSprite しておいてね！
+                k.pos(center[0] * TILE_SIZE, center[1] * TILE_SIZE),
+                k.area(),
+                // k.body(),
+                "monster",
+                {
+                    hp: 3, // 体力
+                    gridX: center[0],
+                    gridY: center[1]
+                }
+            ]);
+            monsters.push(monster);
+        }
+    };
+
+    spawnMonsters();
+
+    const moveEnemies = () => {
+        // プレイヤーの今の位置（グリッド座標）
         const px = Math.floor(player.pos.x / TILE_SIZE);
         const py = Math.floor(player.pos.y / TILE_SIZE);
 
-        // 3. 半径6マスの範囲で視界を計算
-        fov.compute(px, py, 6, (x, y, r, visibility) => {
-            if (visibility > 0) {
-                // 視界に入ったタイルを探す
-                const tilesAtPos = allTiles.filter(t => 
-                    Math.floor(t.pos.x / TILE_SIZE) === x && 
-                    Math.floor(t.pos.y / TILE_SIZE) === y
-                );
+        monsters.forEach(m => {
+            // 1. ダイクストラ法で「プレイヤーへの道」を計算
+            const pather = new ROT.Path.Dijkstra(px, py, (x, y) => {
+                // 床(0)なら通れる、壁(1,2)なら通れない
+                return mapArray[y]?.[x] === 0;
+            }, {
+                topology: 4
+            });
 
-                tilesAtPos.forEach(t => {
-                    t.visible = true; // 今見えている
-                    t.seen = true;    // 一度見た！
-                });
-            }
-        });
+            const mx = Math.floor(m.pos.x / TILE_SIZE);
+            const my = Math.floor(m.pos.y / TILE_SIZE);
 
-        // 4. 見た目に反映させる
-        allTiles.forEach(t => {
-            if (t.visible) {
-                t.opacity = 1; // 視界内はハッキリ
-                t.color = k.WHITE;
-            } else if (t.seen) {
-                t.opacity = 0.3; // 探索済みは薄暗く
-                t.color = k.rgb(100, 100, 150); // 少し青みがけるとかっこいい！
-            } else {
-                t.opacity = 0; // 未探索は真っ暗
+            let nextX = mx;
+            let nextY = my;
+            let path = [];
+            // 2. モンスターの位置から、次の一歩を教えてもらう
+            pather.compute(mx, my, (x, y) => {
+                console.log("動き？", `${mx} -> ${x}`, `${my} -> ${y}`);
+                path.push([x, y]);
+            });
+            if (path[1] != null) {
+                nextX = path[1][0];
+                nextY = path[1][1];
             }
+            k.debug.log("モンスターの移動", nextX, nextY);
+
+            // 3. 次の位置が今の位置と同じなら動かない（道がない時など）
+            if (nextX === mx && nextY === my) return;
+
+            // 4. 次の位置にプレイヤーがいたら攻撃！（まだ移動はしない）
+            if (nextX === px && nextY === py) {
+                k.debug.log("モンスターの攻撃！");
+                k.shake(2); // 画面を揺らしてダメージを表現
+                return;
+            }
+
+            // 5. スムーズに移動させる
+            k.debug.log("モンスター位置", m.pos);
+            const _next = k.vec2(nextX * TILE_SIZE, nextY * TILE_SIZE);
+            k.debug.log("モンスター移動位置", _next);
+            k.tween(m.pos, _next, 0.1, (p) => {
+                m.pos = p;
+            });
         });
     };
 
-    updateFov();
+
+
 
 </script>
