@@ -2,13 +2,11 @@
     import kaplay from "kaplay";
     import * as ROT from "rot-js";
 
-    // --- rot.js でデータ作成 ---
+    // --- Common Kaplay Setting
+
     const cols = 18;//横ブロック数
     const rows = 18;//縦ブロック数
-
-
-
-    // --- Kaplayを起動
+    const TILE_SIZE = 32;
 
     const k = kaplay({
         width: 32*cols,
@@ -25,8 +23,7 @@
     k.loadSprite("potion", "src/potion.png");
     k.loadSprite("scroll", "src/scroll.png");
 
-    const TILE_SIZE = 32;
-    //マップ配列
+    // マップ配列
     const mapArray = new Array(cols);
     for (let i = 0; i < cols; i++) {
         mapArray[i] = new Array(rows);
@@ -38,7 +35,7 @@
         roomHeight: [3, 5],
     });
 
-    //床(0)に隣接した壁(2)へ変更
+    /** 床(0)に隣接した壁(2)へ変更する関数 */
     const replaceWall = (map) => {
         for (let i=1; i< map.length-1; i++) {
             for (let j=1; j< map[i].length-1; j++) {
@@ -56,59 +53,12 @@
         }
     };
 
-    // マップ階層
-    let level;
+    // ----------- Player
 
-    /** マップを生成・再構築 */
-    const setupMap = () => {
-        //マップ配列に情報を書き込む
-        dungeon.create((x, y, type) => {
-            // type: 0=床(.), 1=壁(#)
-            mapArray[y][x] = type;
-        });
-        replaceWall(mapArray);
-
-        // マップデータ（文字列配列）へ変更
-        const mapStrings = mapArray.map(row => row.map(cell => {
-            return cell == 0 ? "." : cell == 1 ? "#" : cell == 2 ? "=" : "";
-        }).join(""));
-
-        if (level != null) level.destroy();
-        level = k.addLevel(mapStrings, {
-            tileWidth: TILE_SIZE,
-            tileHeight: TILE_SIZE,
-            tiles: {
-                ".": () => [
-                    k.sprite("floor", {width: TILE_SIZE, height: TILE_SIZE}),
-                    k.opacity(0), // 最初は真っ暗
-                    "tile",
-                    { seen: false, isWall: false }
-                ],
-                "#": () => [
-                    k.rect(32, 32),
-                    k.color(25, 25, 25),
-                    "bulk",
-                ],
-                "=": () => [
-                    k.sprite("wall", {width: TILE_SIZE, height: TILE_SIZE}),
-                    k.opacity(0), // 最初は真っ暗
-                    "wall",
-                    "tile",
-                    { seen: false, isWall: true }
-                ],
-            },
-        });
-    }
-    //最初のマップを生成
-    setupMap();
-
-    // ----------- 主人公を登場させる
-
-    const rooms = dungeon.getRooms();
-    const startPos = rooms[0].getCenter(); // 最初の部屋の真ん中を取得
+    // const rooms = dungeon.getRooms();
     const player = k.add([
         k.sprite("player", {width: TILE_SIZE, height: TILE_SIZE}),
-        k.pos(startPos[0] * TILE_SIZE, startPos[1] * TILE_SIZE),
+        k.pos(-1 * TILE_SIZE, -1 * TILE_SIZE),
         k.area(),
         k.body(),
         k.z(10),
@@ -118,8 +68,8 @@
             maxHp: 10,
             level: 1,
             exp: 0,
-            gridX: startPos[0],
-            gridY: startPos[1],
+            gridX: -1,
+            gridY: -1,
         },
     ]);
 
@@ -220,6 +170,8 @@
         }
     });
 
+    // ------ FOV
+
     // 視界の広さを決める（160ピクセル ＝ タイル5枚分くらい）
     const VISION_RADIUS = 160;
 
@@ -247,10 +199,8 @@
 
     const monsters = [];
 
-    const spawnMonsters = () => {
-        const rooms = dungeon.getRooms();
-
-        // 最初の部屋（プレイヤーがいる部屋）以外にモンスターを配置
+    /** 最初の部屋（プレイヤーがいる部屋）以外にモンスターを配置 */
+    const spawnMonsters = (rooms) => {
         for (let i = 1; i < rooms.length; i++) {
             const center = rooms[i].getCenter();
 
@@ -269,8 +219,6 @@
             monsters.push(monster);
         }
     };
-    // ゲーム開始にモンスターを配置
-    spawnMonsters();
 
     const moveEnemies = () => {
         // プレイヤーの今の位置（グリッド座標）
@@ -404,18 +352,6 @@
         return feature;
     }
 
-    // 最初の部屋はプレイヤー用なので、2つ目の部屋以降に配置
-    for (let i = 1; i < rooms.length; i++) {
-        const room = rooms[i];
-        // 30%の確率でポーションを置く
-        if (k.chance(0.3)) spawnFeature(room, "potion");
-        // 20%の確率で巻物を置く
-        if (k.chance(0.2)) spawnFeature(room, "scroll");
-    }
-
-    // 最後の部屋に階段を1つ置く
-    spawnFeature(rooms[rooms.length - 1], "stairs");
-
     // 1. Svelteのリアクティブな変数としてインベントリを定義
     let inventory = $state([]);
 
@@ -468,9 +404,53 @@
 
         // マップを再生成して描画
         setupMap();
+    }
+
+    /** マップを生成・再構築 */
+    let level;
+    const setupMap = () => {
+        //マップを生成し、配列に情報を書き込む
+        dungeon.create((x, y, type) => {
+            // type: 0=床(.), 1=壁(#)
+            mapArray[y][x] = type;
+        });
+        replaceWall(mapArray);
+
+        // マップデータ（文字列配列）へ変更
+        const mapStrings = mapArray.map(row => row.map(cell => {
+            return cell == 0 ? "." : cell == 1 ? "#" : cell == 2 ? "=" : "";
+        }).join(""));
+
+        if (level != null) level.destroy();
+        level = k.addLevel(mapStrings, {
+            tileWidth: TILE_SIZE,
+            tileHeight: TILE_SIZE,
+            tiles: {
+                ".": () => [
+                    k.sprite("floor", {width: TILE_SIZE, height: TILE_SIZE}),
+                    k.opacity(0), // 最初は真っ暗
+                    "tile",
+                    { seen: false, isWall: false }
+                ],
+                "#": () => [
+                    k.rect(32, 32),
+                    k.color(25, 25, 25),
+                    "bulk",
+                ],
+                "=": () => [
+                    k.sprite("wall", {width: TILE_SIZE, height: TILE_SIZE}),
+                    k.opacity(0), // 最初は真っ暗
+                    "wall",
+                    "tile",
+                    { seen: false, isWall: true }
+                ],
+            },
+        });
+
+        const rooms = dungeon.getRooms();
 
         // プレイヤーを新しい開始位置に移動
-        const startPos = dungeon.getRooms()[0].getCenter();
+        const startPos = rooms[0].getCenter();
         player.gridX = startPos[0];
         player.gridY = startPos[1];
         player.pos = k.vec2(player.gridX * TILE_SIZE, player.gridY * TILE_SIZE);
@@ -478,10 +458,9 @@
         k.readd(player);
 
         // ゲーム開始にモンスターを配置
-        spawnMonsters();
+        spawnMonsters(rooms);
 
-        // 2つ目の部屋以降にアイテムを配置
-        const rooms = dungeon.getRooms();
+        // 最初の部屋はプレイヤー用なので、2つ目の部屋以降に配置
         for (let i = 1; i < rooms.length; i++) {
             const room = rooms[i];
             // 30%の確率でポーションを置く
@@ -493,6 +472,8 @@
         // 最後の部屋に階段を1つ置く
         spawnFeature(rooms[rooms.length - 1], "stairs");
     }
+    //最初のマップを生成し、ゲームを開始！
+    setupMap();
 </script>
 
 <!-- UI部分：SvelteのHTMLとして記述 -->
