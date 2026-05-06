@@ -6,21 +6,36 @@
     const cols = 18;//横ブロック数
     const rows = 18;//縦ブロック数
 
+
+
+    // --- Kaplayを起動
+
+    const k = kaplay({
+        width: 32*cols,
+        height: 32*rows,
+        background: [20, 20, 20],
+    });
+
+    // 素材の読み込み
+    k.loadSprite("floor", "src/floor.png");
+    k.loadSprite("wall", "src/wall.png");
+    k.loadSprite("player", "src/player.png");
+    k.loadSprite("monster", "src/slime.png");
+    k.loadSprite("stairs", "src/stairs.png");
+    k.loadSprite("potion", "src/potion.png");
+    k.loadSprite("scroll", "src/scroll.png");
+
+    const TILE_SIZE = 32;
     //マップ配列
     const mapArray = new Array(cols);
     for (let i = 0; i < cols; i++) {
         mapArray[i] = new Array(rows);
     }
 
+    // ダンジョン生成器
     const dungeon = new ROT.Map.Digger(cols, rows, {
         roomWidth: [3, 4],
         roomHeight: [3, 5],
-    });
-    //マップ配列に情報を書き込む
-    dungeon.create((x, y, type) => {
-        // type: 0=床(.), 1=壁(#)
-        // mapArray[x][y] = type;
-        mapArray[y][x] = type;
     });
 
     //床(0)に隣接した壁(2)へ変更
@@ -40,54 +55,55 @@
             }
         }
     };
-    replaceWall(mapArray);
 
-    // マップデータ（文字列配列）へ変更
-    const mapStrings = mapArray.map(row => row.map(cell => {
-        return cell == 0 ? "." : cell == 1 ? "#" : cell == 2 ? "=" : "";
-    }).join(""));
+    // マップ階層
+    let level;
 
-    const k = kaplay({
-        width: 32*cols,
-        height: 32*rows,
-        background: [20, 20, 20],
-    });
+    /** マップを生成・再構築 */
+    const setupMap = () => {
+        //マップ配列に情報を書き込む
+        dungeon.create((x, y, type) => {
+            // type: 0=床(.), 1=壁(#)
+            mapArray[y][x] = type;
+        });
+        replaceWall(mapArray);
 
-    // 素材の読み込み
-    k.loadSprite("floor", "src/floor.png");
-    k.loadSprite("wall", "src/wall.png");
-    k.loadSprite("player", "src/player.png");
-    k.loadSprite("monster", "src/slime.png");
+        // マップデータ（文字列配列）へ変更
+        const mapStrings = mapArray.map(row => row.map(cell => {
+            return cell == 0 ? "." : cell == 1 ? "#" : cell == 2 ? "=" : "";
+        }).join(""));
 
-    const TILE_SIZE = 32;
+        if (level != null) level.destroy();
+        level = k.addLevel(mapStrings, {
+            tileWidth: TILE_SIZE,
+            tileHeight: TILE_SIZE,
+            tiles: {
+                ".": () => [
+                    k.sprite("floor", {width: TILE_SIZE, height: TILE_SIZE}),
+                    k.opacity(0), // 最初は真っ暗
+                    "tile",
+                    { seen: false, isWall: false }
+                ],
+                "#": () => [
+                    k.rect(32, 32),
+                    k.color(25, 25, 25),
+                    "bulk",
+                ],
+                "=": () => [
+                    k.sprite("wall", {width: TILE_SIZE, height: TILE_SIZE}),
+                    k.opacity(0), // 最初は真っ暗
+                    "wall",
+                    "tile",
+                    { seen: false, isWall: true }
+                ],
+            },
+        });
+    }
+    //最初のマップを生成
+    setupMap();
 
-    // --- KAPLAY の addLevel で一気に描画 ---
-    const level = k.addLevel(mapStrings, {
-        tileWidth: TILE_SIZE,
-        tileHeight: TILE_SIZE,
-        tiles: {
-            ".": () => [
-                k.sprite("floor", {width: TILE_SIZE, height: TILE_SIZE}),
-                k.opacity(0), // 最初は真っ暗
-                "tile",
-                { seen: false, isWall: false }
-            ],
-            "#": () => [
-                k.rect(32, 32),
-                k.color(25, 25, 25),
-                "bulk",
-            ],
-            "=": () => [
-                k.sprite("wall", {width: TILE_SIZE, height: TILE_SIZE}),
-                k.opacity(0), // 最初は真っ暗
-                "wall",
-                "tile",
-                { seen: false, isWall: true }
-            ],
-        },
-    });
+    // ----------- 主人公を登場させる
 
-    // 主人公を床の上に登場させる
     const rooms = dungeon.getRooms();
     const startPos = rooms[0].getCenter(); // 最初の部屋の真ん中を取得
     const player = k.add([
@@ -95,12 +111,15 @@
         k.pos(startPos[0] * TILE_SIZE, startPos[1] * TILE_SIZE),
         k.area(),
         k.body(),
+        k.z(10),
         "player",
         {
             hp: 10,
             maxHp: 10,
             level: 1,
             exp: 0,
+            gridX: startPos[0],
+            gridY: startPos[1],
         },
     ]);
 
@@ -136,14 +155,14 @@
                 const stairs = k.get("stairs").find(s => s.gridX === player.gridX && s.gridY === player.gridY);
                 if (stairs) {
                     goToNextFloor();
+                    return;
                 }
-                return;
+                break;
             default:
                 return;
         }
 
         // 移動先にモンスターがいるかチェック
-
         const tx = anchor.x / TILE_SIZE;
         const ty = anchor.y / TILE_SIZE;
         const target = monsters.find(m =>
@@ -191,6 +210,10 @@
                 player.pos = p;
             }, k.easings.linear).onEnd(() => {
                 lock = false;
+                player.gridX = Math.floor(player.pos.x / TILE_SIZE);
+                player.gridY = Math.floor(player.pos.y / TILE_SIZE);
+                // アイテムを拾う
+                checkItems();
                 // 移動が終わったら敵が動く
                 endTurn();
             });
@@ -246,7 +269,6 @@
             monsters.push(monster);
         }
     };
-
     // ゲーム開始にモンスターを配置
     spawnMonsters();
 
@@ -357,7 +379,7 @@
         // ターン終了時に階段チェック
         const stairs = k.get("stairs").find(s => s.gridX === player.gridX && s.gridY === player.gridY);
         if (stairs) {
-            addLog("階段がある。降りるなら [Space] キーを押そう！");
+            addLog("階段がある。降りるならスペースキーを押そう！");
         }
     }
 
@@ -374,6 +396,7 @@
         const feature = k.add([
             k.sprite(type, { width: TILE_SIZE, height: TILE_SIZE }),
             k.pos(x * TILE_SIZE, y * TILE_SIZE),
+            k.z(0),
             type, // "potion", "scroll", "stairs" などのタグ
             { gridX: x, gridY: y }
         ]);
@@ -381,8 +404,6 @@
         return feature;
     }
 
-    // マップ生成後の処理
-    // const rooms = dungeon.getRooms();
     // 最初の部屋はプレイヤー用なので、2つ目の部屋以降に配置
     for (let i = 1; i < rooms.length; i++) {
         const room = rooms[i];
@@ -445,13 +466,32 @@
         k.get("scroll").forEach(k.destroy);
         k.get("stairs").forEach(k.destroy);
 
-        // マップを再生成して描画（第3回の処理をもう一度呼ぶ）
+        // マップを再生成して描画
         setupMap();
+
         // プレイヤーを新しい開始位置に移動
         const startPos = dungeon.getRooms()[0].getCenter();
         player.gridX = startPos[0];
         player.gridY = startPos[1];
         player.pos = k.vec2(player.gridX * TILE_SIZE, player.gridY * TILE_SIZE);
+        // プレイヤーの再描画
+        k.readd(player);
+
+        // ゲーム開始にモンスターを配置
+        spawnMonsters();
+
+        // 2つ目の部屋以降にアイテムを配置
+        const rooms = dungeon.getRooms();
+        for (let i = 1; i < rooms.length; i++) {
+            const room = rooms[i];
+            // 30%の確率でポーションを置く
+            if (k.chance(0.3)) spawnFeature(room, "potion");
+            // 20%の確率で巻物を置く
+            if (k.chance(0.2)) spawnFeature(room, "scroll");
+        }
+
+        // 最後の部屋に階段を1つ置く
+        spawnFeature(rooms[rooms.length - 1], "stairs");
     }
 </script>
 
